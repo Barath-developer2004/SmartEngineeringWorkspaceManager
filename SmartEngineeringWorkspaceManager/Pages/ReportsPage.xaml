@@ -1,0 +1,84 @@
+<UserControl x:Class="SmartEngineeringWorkspaceManager.Pages.ReportsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Setup Panel -->
+        <Border Grid.Column="0" Style="{StaticResource StandardCardStyle}" Margin="0,0,20,0" VerticalAlignment="Top">
+            <StackPanel>
+                <TextBlock Style="{StaticResource HeaderTextStyle}" Text="Generate Report" FontSize="20"/>
+
+                <TextBlock Text="Select Report Type:" Style="{StaticResource SubHeaderTextStyle}" FontSize="14"/>
+                <ComboBox x:Name="cbReportType" Margin="0,5,0,20">
+                    <ComboBoxItem Content="Full System Overview" IsSelected="True"/>
+                    <ComboBoxItem Content="Task Status Matrix" />
+                    <ComboBoxItem Content="Activity Audit Trail" />
+                </ComboBox>
+
+                <Button Content="PREVIEW REPORT" Style="{StaticResource PrimaryButtonStyle}" Click="BtnPreview_Click" Margin="0,0,0,30"/>
+
+                <TextBlock Text="Export Options:" Style="{StaticResource SubHeaderTextStyle}" FontSize="14"/>
+
+                <Button Content="Export to Excel (CSV)" Style="{StaticResource PrimaryButtonStyle}" 
+                        Background="{DynamicResource BrandGreen}" Click="BtnExportCsv_Click" Margin="0,5,0,10"/>
+
+                <Button Content="Save as Printable Doc" Style="{StaticResource PrimaryButtonStyle}" 
+                        Background="{DynamicResource BrandOrange}" Click="BtnExportPrint_Click" Margin="0,0,0,10"/>
+
+                <TextBlock x:Name="txtStatus" Foreground="{DynamicResource BrandBlue}" TextWrapping="Wrap" Margin="0,15,0,0" FontWeight="SemiBold"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Right Preview Panel -->
+        <Border Grid.Column="1" Style="{StaticResource StandardCardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Report Preview" Style="{StaticResource HeaderTextStyle}" FontSize="20"/>
+
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
+                    <Border Background="{DynamicResource MainBg}" CornerRadius="5" Padding="15" Margin="0,0,15,0">
+                        <StackPanel>
+                            <TextBlock Text="Total Projects" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                            <TextBlock x:Name="valProj" Text="0" Foreground="{DynamicResource TextPrimary}" FontWeight="Bold" FontSize="24"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource MainBg}" CornerRadius="5" Padding="15" Margin="0,0,15,0">
+                        <StackPanel>
+                            <TextBlock Text="Pending Tasks" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                            <TextBlock x:Name="valPending" Text="0" Foreground="{DynamicResource TextPrimary}" FontWeight="Bold" FontSize="24"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource MainBg}" CornerRadius="5" Padding="15" Margin="0,0,15,0">
+                        <StackPanel>
+                            <TextBlock Text="Done Tasks" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                            <TextBlock x:Name="valDone" Text="0" Foreground="{DynamicResource TextPrimary}" FontWeight="Bold" FontSize="24"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Data Preview -->
+                <DataGrid Grid.Row="2" x:Name="dgPreview" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" Margin="0,10,0,0">
+                    <!-- Columns will be auto-generated inside code behind to support different report types -->
+                </DataGrid>
+
+                <!-- Overlay if no report generated yet -->
+                <Border x:Name="overlayEmpty" Grid.Row="1" Grid.RowSpan="2" Background="{DynamicResource CardBg}" Opacity="0.9">
+                    <TextBlock Text="Click 'Preview Report' to load data" Foreground="{DynamicResource TextSecondary}" HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

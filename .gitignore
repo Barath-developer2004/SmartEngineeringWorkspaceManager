@@ -1,0 +1,10 @@
+bin/
+obj/
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+.vs/
+*.user
+WorkspaceData.sqlite
