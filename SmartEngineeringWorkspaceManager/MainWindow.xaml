@@ -11,57 +11,32 @@
 
     <Window.Resources>
         <!-- Modern Fonts -->
-        <FontFamily x:Key="MainFont">Segoe UI, Helvetica Neue, Arial</FontFamily>
-
-        <!-- Color Palette -->
-        <SolidColorBrush x:Key="SidebarBg" Color="#1E1E2F"/>
-        <SolidColorBrush x:Key="SidebarHover" Color="#2A2A40"/>
-        <SolidColorBrush x:Key="SidebarActive" Color="#3D3D5C"/>
-        <SolidColorBrush x:Key="SidebarText" Color="#A0A0B0"/>
-        <SolidColorBrush x:Key="SidebarTextHover" Color="#FFFFFF"/>
-
-        <SolidColorBrush x:Key="MainBg" Color="#F4F5F7"/>
-        <SolidColorBrush x:Key="HeaderBg" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="CardBg" Color="#FFFFFF"/>
-
-        <SolidColorBrush x:Key="TextPrimary" Color="#2D3748"/>
-        <SolidColorBrush x:Key="TextSecondary" Color="#718096"/>
-        <SolidColorBrush x:Key="BorderColor" Color="#E2E8F0"/>
-
-        <SolidColorBrush x:Key="BrandBlue" Color="#3182CE"/>
-        <SolidColorBrush x:Key="BrandOrange" Color="#DD6B20"/>
-        <SolidColorBrush x:Key="BrandGreen" Color="#38A169"/>
+        <FontFamily x:Key="MainFont">Segoe UI, Helvetica Neue, Arial, sans-serif</FontFamily>
 
         <!-- Navigation Button Style -->
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource SidebarText}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SidebarText}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontFamily" Value="{StaticResource MainFont}"/>
-            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Padding" Value="25,16"/>
-            <Setter Property="Margin" Value="10,4"/>
+            <Setter Property="Padding" Value="24,14"/>
+            <Setter Property="Margin" Value="12,4"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="Center"
                                               Margin="{TemplateBinding Padding}"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <!-- Hover Effect -->
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource SidebarHover}"/>
-                                <Setter Property="Foreground" Value="{StaticResource SidebarTextHover}"/>
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="Black" BlurRadius="5" Opacity="0.1" ShadowDepth="1"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="Background" Value="{DynamicResource SidebarHover}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource SidebarTextHover}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -69,10 +44,10 @@
             </Setter>
         </Style>
 
-        <!-- Active Navigation Button Style (Inherits from NavButtonStyle) -->
+        <!-- Active Navigation Button Style -->
         <Style x:Key="ActiveNavButtonStyle" TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
-            <Setter Property="Background" Value="{StaticResource SidebarActive}"/>
-            <Setter Property="Foreground" Value="{StaticResource SidebarTextHover}"/>
+            <Setter Property="Background" Value="{DynamicResource SidebarActive}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SidebarTextHover}"/>
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
 
@@ -104,22 +79,22 @@
         </Style>
     </Window.Resources>
 
-    <Grid Background="{StaticResource MainBg}">
+    <Grid Background="{DynamicResource MainBg}">
         <Grid.ColumnDefinitions>
             <!-- Left Sidebar -->
-            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="260" />
             <!-- Main Content -->
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- 1. Left Sidebar Navigation -->
-        <Border Grid.Column="0" Background="{StaticResource SidebarBg}">
+        <Border Grid.Column="0" Background="{DynamicResource SidebarBg}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,1,0">
             <StackPanel>
                 <!-- Application Title -->
-                <TextBlock Text="Smart Eng. Workspace" 
-                           Foreground="{StaticResource SidebarTextHover}" 
+                <TextBlock Text="Workspace" 
+                           Foreground="{DynamicResource SidebarTextHover}" 
                            FontFamily="{StaticResource MainFont}"
-                           FontSize="22" 
+                           FontSize="20" 
                            FontWeight="Bold" 
                            Margin="24,36,24,48"
                            TextWrapping="Wrap"/>
@@ -145,26 +120,26 @@
             </Grid.RowDefinitions>
 
             <!-- 2. Top Header -->
-            <Border Grid.Row="0" Background="{StaticResource HeaderBg}" BorderBrush="{StaticResource BorderColor}" BorderThickness="0,0,0,1">
+            <Border Grid.Row="0" Background="{DynamicResource HeaderBg}" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,0,0,1">
                 <Grid Margin="36,0">
                     <TextBlock x:Name="HeaderTitle"
                                Text="Dashboard Overview" 
                                FontFamily="{StaticResource MainFont}"
                                VerticalAlignment="Center" 
-                               FontSize="26" 
+                               FontSize="22" 
                                FontWeight="Bold" 
-                               Foreground="{StaticResource TextPrimary}"/>
+                               Foreground="{DynamicResource TextPrimary}"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <Border Background="#E2E8F0" CornerRadius="20" Width="40" Height="40" Margin="0,0,12,0">
-                            <TextBlock x:Name="txtUserInitial" Text="U" Foreground="{StaticResource TextPrimary}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Background="{DynamicResource BorderColor}" CornerRadius="18" Width="36" Height="36" Margin="0,0,12,0">
+                            <TextBlock x:Name="txtUserInitial" Text="U" Foreground="{DynamicResource TextPrimary}" FontWeight="Bold" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
-                        <TextBlock x:Name="txtWelcomeUser" Text="Welcome, User" 
+                        <TextBlock x:Name="txtWelcomeUser" Text="Welcome" 
                                    FontFamily="{StaticResource MainFont}"
                                    VerticalAlignment="Center" 
-                                   FontSize="15" 
+                                   FontSize="14" 
                                    FontWeight="SemiBold"
-                                   Foreground="{StaticResource TextSecondary}"
+                                   Foreground="{DynamicResource TextSecondary}"
                                    Margin="0,0,20,0"/>
                         <Button x:Name="BtnSignOut" Content="Sign Out" VerticalAlignment="Center" Padding="15,6" Background="Transparent" Foreground="{StaticResource DangerRed}" BorderBrush="{StaticResource DangerRed}" BorderThickness="1" Click="BtnSignOut_Click">
                             <Button.Resources>

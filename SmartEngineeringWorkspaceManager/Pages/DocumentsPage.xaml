@@ -4,119 +4,65 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="900" Background="#F4F5F7">
+             d:DesignHeight="600" d:DesignWidth="900" 
+             Style="{StaticResource FadeInPageStyle}"
+             Background="{DynamicResource MainBg}">
 
-    <UserControl.Resources>
-        <FontFamily x:Key="MainFont">Segoe UI, Helvetica Neue, Arial</FontFamily>
-
-        <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#38A169"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="15,8"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#2F855A"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="InputStyle" TargetType="TextBox">
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderBrush" Value="#E2E8F0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-    </UserControl.Resources>
-
-    <Grid Margin="20">
+    <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Header / Control Bar -->
-        <Border Grid.Row="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+        <Border Grid.Row="0" Style="{StaticResource StandardCardStyle}" Margin="0,0,0,12">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <!-- Give the title a fixed width so it doesn't get squished -->
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0" Text="Document Vault" FontSize="20" FontWeight="Bold" Foreground="#2D3748" VerticalAlignment="Center" FontFamily="{StaticResource MainFont}"/>
+                <TextBlock Grid.Column="0" Text="Document Vault" Style="{StaticResource HeaderTextStyle}" VerticalAlignment="Center" Margin="0"/>
 
-                <!-- Use 'Wrap' so that items naturally stack on smaller screens instead of squishing into the title -->
                 <WrapPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <TextBox x:Name="txtSearch" Width="200" Style="{StaticResource InputStyle}" Text="Search documents..." Foreground="#A0AEC0" GotFocus="TxtSearch_GotFocus" LostFocus="TxtSearch_LostFocus" TextChanged="TxtSearch_TextChanged" Margin="0,0,20,10" VerticalAlignment="Center"/>
+                    <TextBox x:Name="txtSearch" Width="220" Text="Search documents..." Foreground="{DynamicResource TextSecondary}" GotFocus="TxtSearch_GotFocus" LostFocus="TxtSearch_LostFocus" TextChanged="TxtSearch_TextChanged" Margin="0,0,16,0" VerticalAlignment="Center"/>
 
-                    <TextBlock Text="Assign to Project:" VerticalAlignment="Center" Foreground="#718096" Margin="0,0,10,10"/>
-                    <ComboBox x:Name="cbProjects" Width="200" Margin="0,0,20,10" Padding="5" DisplayMemberPath="ProjectName" SelectedValuePath="ProjectId" VerticalAlignment="Center"/>
+                    <TextBlock Text="Assign to Project:" Style="{StaticResource SubHeaderTextStyle}" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="cbProjects" Width="200" DisplayMemberPath="ProjectName" SelectedValuePath="ProjectId" VerticalAlignment="Center" Margin="0,0,16,0"/>
 
-                    <Button Content="+ Upload Document" Style="{StaticResource ActionButtonStyle}" Click="BtnUpload_Click" Margin="0,0,0,10" VerticalAlignment="Center"/>
+                    <Button Content="+ Upload Document" Style="{StaticResource PrimaryButtonStyle}" Click="BtnUpload_Click" VerticalAlignment="Center"/>
                 </WrapPanel>
             </Grid>
         </Border>
 
         <!-- DataGrid to show documents -->
-        <DataGrid x:Name="dgDocuments" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
-                  Background="White" RowBackground="White" AlternatingRowBackground="#F8FAFC"
-                  BorderBrush="#E2E8F0" BorderThickness="1" HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+        <Border Grid.Row="1" Style="{StaticResource StandardCardStyle}" Margin="0">
+            <DataGrid x:Name="dgDocuments" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Doc ID" Binding="{Binding DocumentId}" Width="80"/>
+                    <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="*"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding FileType}" Width="100"/>
+                    <DataGridTextColumn Header="Related Project" Binding="{Binding ProjectName}" Width="200"/>
+                    <DataGridTextColumn Header="Date Uploaded" Binding="{Binding UploadDate, StringFormat=g}" Width="150"/>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Doc ID" Binding="{Binding DocumentId}" Width="60"/>
-                <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="*"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding FileType}" Width="80"/>
-                <DataGridTextColumn Header="Related Project" Binding="{Binding ProjectName}" Width="200"/>
-                <DataGridTextColumn Header="Date Uploaded" Binding="{Binding UploadDate, StringFormat=g}" Width="120"/>
-
-                <!-- Actions Column for Open / Revision / Delete -->
-                <DataGridTemplateColumn Header="Actions" Width="260">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Button Content="Open Base" Background="#3182CE" Foreground="White" BorderThickness="0" Padding="10,5" Margin="0,0,5,0" Cursor="Hand" Click="BtnOpen_Click">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="3"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-
-                                <Button Content="View Revisions" Background="#ED8936" Foreground="White" BorderThickness="0" Padding="10,5" Margin="0,0,5,0" Cursor="Hand" Click="BtnViewRevisions_Click">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="3"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-
-                                <Button Content="Delete" Background="#E53E3E" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand" Margin="0,0,5,0" Click="BtnDelete_Click">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="3"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                    <!-- Actions Column -->
+                    <DataGridTemplateColumn Header="Actions" Width="310">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="Open Base" Style="{StaticResource PrimaryButtonStyle}" Padding="10,6" Margin="0,0,5,0" Click="BtnOpen_Click"/>
+                                    <Button Content="View Revisions" Style="{StaticResource PrimaryButtonStyle}" Background="{DynamicResource BrandOrange}" Padding="10,6" Margin="0,0,5,0" Click="BtnViewRevisions_Click"/>
+                                    <Button Content="Delete" Style="{StaticResource PrimaryButtonStyle}" Background="{DynamicResource DangerRed}" Padding="10,6" Click="BtnDelete_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
 
         <!-- Revision History Pop-out Panel (Hidden by default) -->
-        <Border x:Name="RevisionPanel" Grid.Row="1" Background="White" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="20" Visibility="Collapsed" Panel.ZIndex="10">
+        <Border x:Name="RevisionPanel" Grid.Row="1" Style="{StaticResource StandardCardStyle}" Margin="0" Visibility="Collapsed" Panel.ZIndex="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -124,30 +70,22 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="0,0,0,15">
-                    <TextBlock x:Name="RevTitleText" Text="Revision History" FontSize="18" FontWeight="Bold" Foreground="#2D3748" FontFamily="{StaticResource MainFont}"/>
-                    <Button Content="Close" HorizontalAlignment="Right" Background="Transparent" Foreground="#E53E3E" BorderThickness="0" FontSize="14" FontWeight="Bold" Cursor="Hand" Click="BtnCloseRevisions_Click"/>
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <TextBlock x:Name="RevTitleText" Text="Revision History" Style="{StaticResource HeaderTextStyle}" Margin="0"/>
+                    <Button Content="Close" HorizontalAlignment="Right" Background="Transparent" Foreground="{DynamicResource DangerRed}" BorderThickness="0" FontSize="14" FontWeight="Bold" Cursor="Hand" Click="BtnCloseRevisions_Click"/>
                 </Grid>
 
-                <DataGrid x:Name="dgRevisions" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
-                          Background="White" RowBackground="White" AlternatingRowBackground="#F8FAFC"
-                          BorderBrush="#E2E8F0" BorderThickness="1" HeadersVisibility="Column" GridLinesVisibility="Horizontal">
+                <DataGrid x:Name="dgRevisions" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Version" Binding="{Binding VersionNumber}" Width="80" FontWeight="Bold"/>
-                        <DataGridTextColumn Header="Modified Date" Binding="{Binding ModifiedDate, StringFormat=g}" Width="150"/>
-                        <DataGridTextColumn Header="Modifier" Binding="{Binding ModifierName}" Width="150"/>
+                        <DataGridTextColumn Header="Version" Binding="{Binding VersionNumber}" Width="100" FontWeight="Bold"/>
+                        <DataGridTextColumn Header="Modified Date" Binding="{Binding ModifiedDate, StringFormat=g}" Width="160"/>
+                        <DataGridTextColumn Header="Modifier" Binding="{Binding ModifierName}" Width="160"/>
                         <DataGridTextColumn Header="Comment" Binding="{Binding RevisionComment}" Width="*"/>
 
-                        <DataGridTemplateColumn Header="Open" Width="80">
+                        <DataGridTemplateColumn Header="Open" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Open File" Background="#3182CE" Foreground="White" BorderThickness="0" Padding="8,4" Cursor="Hand" Click="BtnOpenRevision_Click">
-                                        <Button.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="CornerRadius" Value="3"/>
-                                            </Style>
-                                        </Button.Resources>
-                                    </Button>
+                                    <Button Content="Open File" Style="{StaticResource PrimaryButtonStyle}" Padding="12,6" Click="BtnOpenRevision_Click"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -155,22 +93,24 @@
                 </DataGrid>
 
                 <!-- Add New Revision Form -->
-                <StackPanel Grid.Row="2" Margin="0,20,0,0">
-                    <TextBlock Text="Upload New Revision:" FontWeight="Bold" Margin="0,0,0,10"/>
-                    <Grid>
+                <StackPanel Grid.Row="2" Margin="0,24,0,0">
+                    <TextBlock Text="Upload New Revision" Style="{StaticResource SubHeaderTextStyle}"/>
+                    <Grid Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="120" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Version (e.g. v2.0): " VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBox x:Name="txtNewVersion" Grid.Column="1" Width="100" HorizontalAlignment="Left" Style="{StaticResource InputStyle}" Margin="0,0,15,0"/>
+                        <TextBlock Grid.Column="0" Text="Version: " VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBox x:Name="txtNewVersion" Grid.Column="1" HorizontalAlignment="Stretch" Margin="0"/>
 
-                        <TextBlock Grid.Column="0" Text="Comment: " VerticalAlignment="Center" Margin="120,0,5,0"/>
-                        <TextBox x:Name="txtRevComment" Grid.Column="1" HorizontalAlignment="Stretch" Style="{StaticResource InputStyle}" Margin="80,0,15,0"/>
+                        <TextBlock Grid.Column="2" Text="Comment: " VerticalAlignment="Center" Margin="20,0,10,0"/>
+                        <TextBox x:Name="txtRevComment" Grid.Column="3" HorizontalAlignment="Stretch" Margin="0"/>
 
-                        <Button Grid.Column="2" Content="Browse &amp; Upload" Style="{StaticResource ActionButtonStyle}" Background="#ED8936" Click="BtnUploadRevision_Click"/>
+                        <Button Grid.Column="4" Content="Browse &amp; Upload" Style="{StaticResource PrimaryButtonStyle}" Background="{DynamicResource BrandOrange}" Margin="15,0,0,0" Click="BtnUploadRevision_Click"/>
                     </Grid>
                 </StackPanel>
             </Grid>

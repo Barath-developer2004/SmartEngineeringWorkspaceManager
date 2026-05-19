@@ -4,123 +4,83 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="900" Background="#F4F5F7">
-
-    <UserControl.Resources>
-        <!-- Similar styling from MainWindow -->
-        <FontFamily x:Key="MainFont">Segoe UI, Helvetica Neue, Arial</FontFamily>
-
-        <Style x:Key="ActionButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#3182CE"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="15,8"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#2B6CB0"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="InputStyle" TargetType="TextBox">
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderBrush" Value="#E2E8F0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}"/>
-        </Style>
-    </UserControl.Resources>
+             d:DesignHeight="600" d:DesignWidth="900" 
+             Style="{StaticResource FadeInPageStyle}"
+             Background="{DynamicResource MainBg}">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <!-- Left Panel for adding/editing projects -->
-            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="340"/>
             <!-- Right Panel for list -->
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Left Form Panel -->
-        <Border Grid.Column="0" Background="White" BorderBrush="#E2E8F0" BorderThickness="0,0,1,0" Padding="20">
+        <Border Grid.Column="0" Style="{StaticResource StandardCardStyle}" Margin="12,12,0,12">
             <StackPanel>
-                <TextBlock x:Name="FormTitle" Text="Create New Project" FontSize="18" FontWeight="Bold" Foreground="#2D3748" Margin="0,0,0,20" FontFamily="{StaticResource MainFont}"/>
+                <TextBlock x:Name="FormTitle" Text="Create New Project" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,24"/>
 
-                <TextBlock Text="Project Name *" Foreground="#718096" Margin="0,0,0,5" FontFamily="{StaticResource MainFont}"/>
-                <TextBox x:Name="txtProjectName" Style="{StaticResource InputStyle}" Margin="0,0,0,15"/>
+                <TextBlock Text="Project Name *" Style="{StaticResource SubHeaderTextStyle}" Margin="0,0,0,4"/>
+                <TextBox x:Name="txtProjectName"/>
 
-                <TextBlock Text="Deadline *" Foreground="#718096" Margin="0,0,0,5" FontFamily="{StaticResource MainFont}"/>
-                <DatePicker x:Name="dpDeadline" Margin="0,0,0,15"/>
+                <TextBlock Text="Deadline *" Style="{StaticResource SubHeaderTextStyle}" Margin="0,0,0,4"/>
+                <DatePicker x:Name="dpDeadline" Margin="0,4,0,16"/>
 
-                <TextBlock Text="Status" Foreground="#718096" Margin="0,0,0,5" FontFamily="{StaticResource MainFont}"/>
-                <ComboBox x:Name="cbStatus" Margin="0,0,0,15" Padding="5">
+                <TextBlock Text="Status" Style="{StaticResource SubHeaderTextStyle}" Margin="0,0,0,4"/>
+                <ComboBox x:Name="cbStatus">
                     <ComboBoxItem Content="Active" IsSelected="True"/>
                     <ComboBoxItem Content="Planning"/>
                     <ComboBoxItem Content="Completed"/>
                     <ComboBoxItem Content="On Hold"/>
                 </ComboBox>
 
-                <TextBlock Text="Description" Foreground="#718096" Margin="0,0,0,5" FontFamily="{StaticResource MainFont}"/>
-                <TextBox x:Name="txtDescription" Style="{StaticResource InputStyle}" Height="80" TextWrapping="Wrap" AcceptsReturn="True" Margin="0,0,0,20"/>
+                <TextBlock Text="Description" Style="{StaticResource SubHeaderTextStyle}" Margin="0,0,0,4"/>
+                <TextBox x:Name="txtDescription" Height="100" TextWrapping="Wrap" AcceptsReturn="True"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="btnClear" Content="Clear" Background="#E2E8F0" Foreground="#2D3748" Style="{StaticResource ActionButtonStyle}" Margin="0,0,10,0" Click="BtnClear_Click"/>
-                    <Button x:Name="btnSave" Content="Save Project" Style="{StaticResource ActionButtonStyle}" Click="BtnSave_Click"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                    <Button x:Name="btnClear" Content="Clear" Style="{StaticResource PrimaryButtonStyle}" Background="Transparent" Foreground="{DynamicResource TextSecondary}" Margin="0,0,10,0" Click="BtnClear_Click"/>
+                    <Button x:Name="btnSave" Content="Save Project" Style="{StaticResource PrimaryButtonStyle}" Click="BtnSave_Click"/>
                 </StackPanel>
             </StackPanel>
         </Border>
 
         <!-- Right DataGrid Panel -->
-        <Grid Grid.Column="1" Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Border Grid.Column="1" Style="{StaticResource StandardCardStyle}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!-- Search and Action Bar -->
-            <Grid Grid.Row="0" Margin="0,0,0,15">
-                <TextBlock Text="Project Directory" FontSize="20" FontWeight="Bold" Foreground="#2D3748" VerticalAlignment="Center" FontFamily="{StaticResource MainFont}"/>
+                <!-- Search and Action Bar -->
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <TextBlock Text="Project Directory" Style="{StaticResource HeaderTextStyle}" Margin="0"/>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBox x:Name="txtSearch" Width="200" Style="{StaticResource InputStyle}" Text="Search projects..." Foreground="#A0AEC0" GotFocus="TxtSearch_GotFocus" LostFocus="TxtSearch_LostFocus" TextChanged="TxtSearch_TextChanged" Margin="0,0,10,0"/>
-                </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <TextBox x:Name="txtSearch" Width="220" Text="Search projects..." Foreground="{DynamicResource TextSecondary}" GotFocus="TxtSearch_GotFocus" LostFocus="TxtSearch_LostFocus" TextChanged="TxtSearch_TextChanged" Margin="0"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- DataGrid to show projects -->
+                <DataGrid x:Name="dgProjects" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="DgProjects_SelectionChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding ProjectId}" Width="50"/>
+                        <DataGridTextColumn Header="Project Name" Binding="{Binding ProjectName}" Width="*"/>
+                        <DataGridTextColumn Header="Deadline" Binding="{Binding Deadline, StringFormat=d}" Width="100"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+
+                        <!-- Action Column for Delete button -->
+                        <DataGridTemplateColumn Header="Actions" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Delete" Style="{StaticResource PrimaryButtonStyle}" Background="{DynamicResource DangerRed}" Padding="10,6" Click="BtnDelete_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
-
-            <!-- DataGrid to show projects -->
-            <DataGrid x:Name="dgProjects" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
-                      Background="White" RowBackground="White" AlternatingRowBackground="#F8FAFC"
-                      BorderBrush="#E2E8F0" BorderThickness="1" HeadersVisibility="Column" GridLinesVisibility="Horizontal" SelectionChanged="DgProjects_SelectionChanged">
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding ProjectId}" Width="50"/>
-                    <DataGridTextColumn Header="Project Name" Binding="{Binding ProjectName}" Width="*"/>
-                    <DataGridTextColumn Header="Deadline" Binding="{Binding Deadline, StringFormat=d}" Width="100"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-
-                    <!-- Action Column for Delete button -->
-                    <DataGridTemplateColumn Header="Actions" Width="80">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Delete" Background="#E53E3E" Foreground="White" BorderThickness="0" Padding="10,5" Cursor="Hand" Click="BtnDelete_Click">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="3"/>
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+        </Border>
     </Grid>
 </UserControl>

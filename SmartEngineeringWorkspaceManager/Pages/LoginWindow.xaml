@@ -1,11 +1,11 @@
 <Window x:Class="SmartEngineeringWorkspaceManager.Pages.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Login - Smart Engineering Workspace Manager" Height="450" Width="400"
+        Title="Login - Smart Engineering Workspace Manager" Height="500" Width="450"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         Background="{DynamicResource MainBg}">
 
-    <Border Style="{DynamicResource StandardCardStyle}" Margin="40" Padding="30">
+    <Border Style="{DynamicResource StandardCardStyle}" Margin="30" Padding="30">
         <StackPanel VerticalAlignment="Center">
 
             <TextBlock Text="Smart Engineering" Style="{StaticResource HeaderTextStyle}" HorizontalAlignment="Center" Margin="0,0,0,0"/>
